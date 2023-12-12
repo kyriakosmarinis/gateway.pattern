@@ -12,9 +12,26 @@ namespace gateway.api.Controllers
     {
         private readonly HttpClient _httpClient;
 
-        public ProxyController(IHttpClientFactory httpClientFactory)
-        {
+        public ProxyController(IHttpClientFactory httpClientFactory) {
             _httpClient = httpClientFactory.CreateClient();
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetData() {
+            var weatherTask = ProxyTo("https://localhost:7186/weather");
+            var newsTask = ProxyTo("https://localhost:7110/news");
+
+            await Task.WhenAll(weatherTask, newsTask);
+            var weatherContent = await weatherTask;
+            var newsContent = await newsTask;
+
+            var combinedResult = new {
+                Weather = weatherContent,
+                News = newsContent
+            };
+
+            return new JsonResult(combinedResult);
         }
 
         [HttpGet]
