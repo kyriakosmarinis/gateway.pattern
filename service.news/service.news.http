@@ -1,0 +1,7 @@
+﻿@service.news_HostAddress = http://localhost:5283
+
+GET {{service.news_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
