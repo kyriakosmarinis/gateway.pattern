@@ -1,4 +1,8 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using gateway.api.Services;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<DataService>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
