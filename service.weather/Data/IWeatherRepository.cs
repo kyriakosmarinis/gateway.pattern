@@ -1,11 +1,11 @@
-﻿using System;
-using service.weather.Models;
+﻿using OpenWeatherMap.Cache.Models;
 
 namespace service.weather.Data
 {
 	public interface IWeatherRepository
 	{
-		IEnumerable<Weather> GetWeather();//todo remame
-	}
+        Task<IEnumerable<WeatherCondition>> GetWeatherAsync();
+        Task<string> GetWeatherHttpAsync();
+    }
 }
 

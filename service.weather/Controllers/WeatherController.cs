@@ -19,23 +19,22 @@ namespace service.weather.Controllers
             _weatherRepository = weatherRepository ?? throw new ArgumentNullException(nameof(weatherRepository));
         }
 
-        [HttpGet]
-        public IEnumerable<Weather> Get() => _weatherRepository.GetWeather();
+        [HttpGet("http")]
+        public async Task<string> GetOpenWeatherHttp() {
+            var weather = await _weatherRepository.GetWeatherHttpAsync();
 
-        #region
-        //private static readonly string[] Summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        //[HttpGet(Name = "GetWeatherForecast")]
-        //public IEnumerable<WeatherForecast> Get()
-        //{
-        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    {
-        //        Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-        //        TemperatureC = Random.Shared.Next(-20, 55),
-        //        Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        //    })
-        //    .ToArray();
-        //}
-        #endregion
+            if (weather != null) return (weather);
+            return "error";
+        }
+
+        [HttpGet("api")]
+        public async Task<IEnumerable<OpenWeatherMap.Cache.Models.WeatherCondition>> GetOpenWeather()
+        {
+            var weather = await _weatherRepository.GetWeatherAsync();
+
+            if (weather != null) return (weather);
+            return null;
+        }
     }
 }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using NewsAPI.Models;
 using service.news.Data;
 using service.news.Models;
 
@@ -14,13 +15,14 @@ namespace service.news.Controllers
     {
         private readonly INewsRepository _newsRepository;
 
-        public NewsController(INewsRepository newsRepository)
-        {
+        public NewsController(INewsRepository newsRepository) {
             _newsRepository = newsRepository ?? throw new ArgumentNullException(nameof(newsRepository));
         }
 
-        [HttpGet]
-        public IEnumerable<News> Get() => _newsRepository.GetNews();
+        [HttpGet("api")]
+        public async Task<string> GetNewsAsync() {
+            return await _newsRepository.GetNewsAsync();
+        }
     }
 }
 
