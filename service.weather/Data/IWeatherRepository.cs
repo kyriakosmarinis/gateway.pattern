@@ -4,7 +4,7 @@ namespace service.weather.Data
 {
 	public interface IWeatherRepository
 	{
-        Task<Weather> GetWeatherAsync();
+        Task<Weather> GetWeatherAsync(double lat, double lon);
         Task<string> GetWeatherHttpAsync();
     }
 }

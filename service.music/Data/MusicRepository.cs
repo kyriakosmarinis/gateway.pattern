@@ -15,7 +15,7 @@ namespace service.music.Data
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public async Task<Band> GetBandAsync() {
+        public async Task<Band> GetBandAsync(string bandId) {
             using HttpClient client = new();
             string tokenEndpoint = "https://accounts.spotify.com/api/token";
 
@@ -28,7 +28,10 @@ namespace service.music.Data
             HttpResponseMessage response = await client.PostAsync(tokenEndpoint, requestData);
 
             if (response.IsSuccessStatusCode) {
-                string apiUrl = "https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb";
+                string apiUrl = $"https://api.spotify.com/v1/artists/{bandId}";
+                //string apiUrl = "https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb";
+
+
                 string responseContent = await response.Content.ReadAsStringAsync();
                 JObject json = JObject.Parse(responseContent);
                 string accessToken = json["access_token"].ToString();
@@ -43,7 +46,6 @@ namespace service.music.Data
                         Name = jsonData["name"].ToString(),
                         Type = jsonData["type"].ToString(),
                         Popularity = jsonData["popularity"].ToString()
-                        //Followers = jsonData["total"].ToString()
                     };
 
                     return band;

@@ -15,8 +15,8 @@ namespace service.news.Controllers
         }
 
         [HttpGet("api")]
-        public async Task<IEnumerable<Article>> GetNewsAsync() {
-            return await _newsRepository.GetNewsAsync();
+        public async Task<IEnumerable<Article>> GetNewsAsync(string q) {
+            return await _newsRepository.GetNewsAsync(q);
         }
     }
 }

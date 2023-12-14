@@ -28,9 +28,9 @@ namespace service.weather.Controllers
         }
 
         [HttpGet("api")]
-        public async Task<Weather> GetOpenWeather()
+        public async Task<Weather> GetOpenWeather(double lat = 37.04149096479284, double lon = 22.112488382989756)
         {
-            var weather = await _weatherRepository.GetWeatherAsync();
+            var weather = await _weatherRepository.GetWeatherAsync(lat, lon);
 
             if (weather != null) return (weather);
             return new Weather();

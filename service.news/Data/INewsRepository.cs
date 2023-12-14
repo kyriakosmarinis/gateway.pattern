@@ -4,7 +4,7 @@ namespace service.news.Data
 {
 	public interface INewsRepository
 	{
-        Task<IEnumerable<Article>> GetNewsAsync();
+        Task<IEnumerable<Article>> GetNewsAsync(string q);
     }
 }
 

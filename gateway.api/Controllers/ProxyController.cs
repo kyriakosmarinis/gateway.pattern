@@ -18,8 +18,8 @@ namespace gateway.api.Controllers
         }
 
         [HttpGet("data")]
-        public async Task<IActionResult> GetDataAsync() {
-            var result = await _dataService.GetDataAsync();
+        public async Task<IActionResult> GetDataAsync(double lat = 37.04149096479284, double lon = 22.112488382989756, string q = "Greece", string bandId = "4Z8W4fKeB5YxbusRsdQVPb") {
+            var result = await _dataService.GetDataAsync(lat, lon, q, bandId);
 
             return Ok(result);
         }

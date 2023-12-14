@@ -14,11 +14,11 @@ namespace service.news.Data
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public async Task<IEnumerable<Article>> GetNewsAsync() {
+        public async Task<IEnumerable<Article>> GetNewsAsync(string q) {
             var newsApiClient = new NewsApiClient(_configuration.GetSection("AppSettings")["NewsApiKey"]);
 
             var articlesResponse = await newsApiClient.GetEverythingAsync(new EverythingRequest {
-                Q = "Apple",
+                Q = $"{q}",
                 SortBy = SortBys.Popularity,
                 Language = Languages.EN,
                 From = new DateTime(2023, 12, 12),

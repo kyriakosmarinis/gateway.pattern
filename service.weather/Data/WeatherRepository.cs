@@ -12,9 +12,9 @@ namespace service.weather.Data
             _openWeatherMapCache = openWeatherMapCache ?? throw new ArgumentNullException(nameof(openWeatherMapCache));
         }
 
-        public async Task<Weather> GetWeatherAsync() {
+        public async Task<Weather> GetWeatherAsync(double lat, double lon) {
             try {
-                var locationQuery = new OpenWeatherMap.Cache.Models.Location(37.04149096479284, 22.112488382989756);
+                var locationQuery = new OpenWeatherMap.Cache.Models.Location(lat, lon);
                 var readings = await _openWeatherMapCache.GetReadingsAsync(locationQuery);
 
                 if (readings.IsSuccessful) {

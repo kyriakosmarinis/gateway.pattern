@@ -16,10 +16,10 @@ namespace gateway.api.Services
             _httpClient = httpClientFactory.CreateClient();
         }
 
-        public async Task<IActionResult> GetDataAsync() {
-            var weatherTask = GetWeatherDataAsync();
-            var newsTask = GetNewsDataAsync();
-            var musicTask = GetMusicDataAsync();
+        public async Task<IActionResult> GetDataAsync(double lat, double lon, string q, string bandId) {
+            var weatherTask = GetWeatherDataAsync(lat, lon);
+            var newsTask = GetNewsDataAsync(q);
+            var musicTask = GetMusicDataAsync(bandId);
 
             await Task.WhenAll(weatherTask, newsTask, musicTask);
             var weatherContent = await weatherTask;
@@ -29,18 +29,47 @@ namespace gateway.api.Services
             var combinedResult = new
             {
                 Weather = JsonConvert.DeserializeObject<Weather>(weatherContent.Content),
-                News = JsonConvert.DeserializeObject<List<Article>>(newsContent.Content),
-                Music = JsonConvert.DeserializeObject<Band>(musicContent.Content)
+                Music = JsonConvert.DeserializeObject<Band>(musicContent.Content),
+                News = JsonConvert.DeserializeObject<List<Article>>(newsContent.Content)                
             };
 
             return new JsonResult(combinedResult);
         }
 
-        private async Task<ContentResult> GetWeatherDataAsync(string url = "https://localhost:7186/weather/api")
-        {
+        #region Weather
+        private async Task<ContentResult> GetWeatherDataAsync(double lat, double lon) {
+            string url = $"https://localhost:7186/weather/api?lat={lat}&lon={lon}";
+
             try {
                 var content = await _httpClient.GetStringAsync(url);
-                
+
+                return new ContentResult
+                {
+                    Content = content,
+                    ContentType = "application/json",
+                    StatusCode = (int)HttpStatusCode.OK
+                };
+            }
+            catch (HttpRequestException)
+            {
+                return new ContentResult
+                {
+                    Content = "Error occurred while fetching data.",
+                    ContentType = "text/plain",
+                    StatusCode = (int)HttpStatusCode.InternalServerError
+                };
+            }
+        }
+        #endregion
+
+        #region News
+        private async Task<ContentResult> GetNewsDataAsync(string q)
+        {
+            string url = $"https://localhost:7110/news/api?q={q}";
+
+            try {
+                var content = await _httpClient.GetStringAsync(url);
+
                 return new ContentResult {
                     Content = content,
                     ContentType = "application/json",
@@ -55,29 +84,13 @@ namespace gateway.api.Services
                 };
             }
         }
+        #endregion
 
-        private async Task<ContentResult> GetNewsDataAsync(string url = "https://localhost:7110/news/api")
+        #region Music
+        private async Task<ContentResult> GetMusicDataAsync(string bandId)
         {
-            try {
-                var content = await _httpClient.GetStringAsync(url);
+            string url = $"https://localhost:7015/music/api?bandId={bandId}";
 
-                return new ContentResult {
-                    Content = content,
-                    ContentType = "application/json",
-                    StatusCode = (int)HttpStatusCode.OK
-                };
-            }
-            catch (HttpRequestException) {
-                return new ContentResult {
-                    Content = "Error occurred while fetching data.",
-                    ContentType = "text/plain",
-                    StatusCode = (int)HttpStatusCode.InternalServerError
-                };
-            }
-        }
-
-        private async Task<ContentResult> GetMusicDataAsync(string url = "https://localhost:7015/music/api")
-        {
             try
             {
                 var content = await _httpClient.GetStringAsync(url);
@@ -99,6 +112,7 @@ namespace gateway.api.Services
                 };
             }
         }
+        #endregion
 
         #region proxy
         /*private async Task<ContentResult> ProxyTo(string url) => Content(await _httpClient.GetStringAsync(url));
