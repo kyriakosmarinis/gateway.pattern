@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using gateway.shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using service.weather.Data;
-using service.weather.Models;
 
 namespace service.weather.Controllers
 {
@@ -28,12 +28,12 @@ namespace service.weather.Controllers
         }
 
         [HttpGet("api")]
-        public async Task<IEnumerable<OpenWeatherMap.Cache.Models.WeatherCondition>> GetOpenWeather()
+        public async Task<Weather> GetOpenWeather()
         {
             var weather = await _weatherRepository.GetWeatherAsync();
 
             if (weather != null) return (weather);
-            return null;
+            return new Weather();
         }
     }
 }

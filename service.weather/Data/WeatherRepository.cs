@@ -1,7 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using gateway.shared.Models;
 using OpenWeatherMap.Cache;
-using service.weather.Models;
 
 namespace service.weather.Data
 {
@@ -14,12 +12,22 @@ namespace service.weather.Data
             _openWeatherMapCache = openWeatherMapCache ?? throw new ArgumentNullException(nameof(openWeatherMapCache));
         }
 
-        public async Task<IEnumerable<OpenWeatherMap.Cache.Models.WeatherCondition>> GetWeatherAsync() {
+        public async Task<Weather> GetWeatherAsync() {
             try {
-                var locationQuery = new OpenWeatherMap.Cache.Models.ZipCode("94040", "us");
+                var locationQuery = new OpenWeatherMap.Cache.Models.Location(37.04149096479284, 22.112488382989756);
                 var readings = await _openWeatherMapCache.GetReadingsAsync(locationQuery);
 
-                if (readings.IsSuccessful) return readings.Weather;
+                if (readings.IsSuccessful) {
+                    var weather = new Weather {
+                        CityName = readings.CityName,
+                        CountryCode = readings.CountryCode,
+                        Description = readings.Weather[0].Description,
+                        FetchedTime = readings.FetchedTime,
+                        TemperatureC = readings.Temperature.DegreesCelsius
+                    };
+
+                    return weather;
+                }
                 else {
                     var apiErrorCode = readings.Exception?.ApiErrorCode;
                     var apiErrorMessage = readings.Exception?.ApiErrorMessage;
@@ -29,9 +37,12 @@ namespace service.weather.Data
             }
             catch (Exception ex) {
                 Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-                return Enumerable.Empty<OpenWeatherMap.Cache.Models.WeatherCondition>();
+                return new Weather();
             }
         }
+
+
+
 
         #region http
         private const string _weatherApiKey = "2a74a221dbc2486457abb63b67ae8f7b";

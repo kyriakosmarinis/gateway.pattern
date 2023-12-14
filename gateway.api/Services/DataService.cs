@@ -2,21 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
+using gateway.shared.Models;
+using NewsAPI.Models;
 
 namespace gateway.api.Services
 {
-    public class User {
-        public Guid Id { get; set; }
-        public string Email { get; set; } = string.Empty;
-        public UserData Data { get; set; } = new UserData();
-    }
-
-    public class UserData {
-        public string Weather { get; set; } = string.Empty;
-        public string News { get; set; } = string.Empty;
-    }
-
-
 	public class DataService {
         private readonly HttpClient _httpClient;
 
@@ -27,30 +19,28 @@ namespace gateway.api.Services
         public async Task<IActionResult> GetDataAsync() {
             var weatherTask = GetWeatherDataAsync();
             var newsTask = GetNewsDataAsync();
+            var musicTask = GetMusicDataAsync();
 
-            await Task.WhenAll(weatherTask, newsTask);
+            await Task.WhenAll(weatherTask, newsTask, musicTask);
             var weatherContent = await weatherTask;
             var newsContent = await newsTask;
+            var musicContent = await musicTask;
 
-            var user = new User();
-            user.Id = new Guid();
-            user.Email = $"{user.Id}@mail.com";
-            user.Data.Weather = weatherContent.Content;
-            user.Data.News = newsContent.Content;
+            var combinedResult = new
+            {
+                Weather = JsonConvert.DeserializeObject<Weather>(weatherContent.Content),
+                News = JsonConvert.DeserializeObject<List<Article>>(newsContent.Content),
+                Music = JsonConvert.DeserializeObject<Band>(musicContent.Content)
+            };
 
-            //var combinedResult = new {
-            //    //Weather = weatherContent,
-            //    //News = newsContent
-            //};
-
-            return new JsonResult(user);//combinedResult);
+            return new JsonResult(combinedResult);
         }
 
         private async Task<ContentResult> GetWeatherDataAsync(string url = "https://localhost:7186/weather/api")
         {
             try {
                 var content = await _httpClient.GetStringAsync(url);
-
+                
                 return new ContentResult {
                     Content = content,
                     ContentType = "application/json",
@@ -79,6 +69,30 @@ namespace gateway.api.Services
             }
             catch (HttpRequestException) {
                 return new ContentResult {
+                    Content = "Error occurred while fetching data.",
+                    ContentType = "text/plain",
+                    StatusCode = (int)HttpStatusCode.InternalServerError
+                };
+            }
+        }
+
+        private async Task<ContentResult> GetMusicDataAsync(string url = "https://localhost:7015/music/api")
+        {
+            try
+            {
+                var content = await _httpClient.GetStringAsync(url);
+
+                return new ContentResult
+                {
+                    Content = content,
+                    ContentType = "application/json",
+                    StatusCode = (int)HttpStatusCode.OK
+                };
+            }
+            catch (HttpRequestException)
+            {
+                return new ContentResult
+                {
                     Content = "Error occurred while fetching data.",
                     ContentType = "text/plain",
                     StatusCode = (int)HttpStatusCode.InternalServerError

@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service.weather", "service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service.news", "service.news\service.news.csproj", "{444ACA00-57F2-42DE-BA97-E185EE3F16C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service.music", "service.music\service.music.csproj", "{5DDDBEDE-7B21-4968-BFB3-97ACD07AF2FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gateway.shared", "gateway.shared\gateway.shared.csproj", "{07453B1C-92FA-431E-AC3E-B2B57BC670FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{444ACA00-57F2-42DE-BA97-E185EE3F16C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{444ACA00-57F2-42DE-BA97-E185EE3F16C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{444ACA00-57F2-42DE-BA97-E185EE3F16C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DDDBEDE-7B21-4968-BFB3-97ACD07AF2FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DDDBEDE-7B21-4968-BFB3-97ACD07AF2FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DDDBEDE-7B21-4968-BFB3-97ACD07AF2FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DDDBEDE-7B21-4968-BFB3-97ACD07AF2FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07453B1C-92FA-431E-AC3E-B2B57BC670FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07453B1C-92FA-431E-AC3E-B2B57BC670FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07453B1C-92FA-431E-AC3E-B2B57BC670FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07453B1C-92FA-431E-AC3E-B2B57BC670FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

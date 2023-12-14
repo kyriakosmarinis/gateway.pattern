@@ -1,13 +1,10 @@
-﻿using System;
-using NewsAPI.Models;
-using service.news.Models;
+﻿using NewsAPI.Models;
 
 namespace service.news.Data
 {
 	public interface INewsRepository
 	{
-        //Task<IEnumerable<Article>> GetNewsAsync();
-        Task<string> GetNewsAsync();
+        Task<IEnumerable<Article>> GetNewsAsync();
     }
 }
 

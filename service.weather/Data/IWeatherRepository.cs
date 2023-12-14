@@ -1,10 +1,10 @@
-﻿using OpenWeatherMap.Cache.Models;
+﻿using gateway.shared.Models;
 
 namespace service.weather.Data
 {
 	public interface IWeatherRepository
 	{
-        Task<IEnumerable<WeatherCondition>> GetWeatherAsync();
+        Task<Weather> GetWeatherAsync();
         Task<string> GetWeatherHttpAsync();
     }
 }

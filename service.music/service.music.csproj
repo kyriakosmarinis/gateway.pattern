@@ -12,14 +12,15 @@
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="OpenWeatherMap.Cache" Version="1.9.12" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="service.music.http" />
+    <None Remove="Controllers\" />
     <None Remove="Data\" />
-    <None Remove="service.weather.http" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controllers\" />
     <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>

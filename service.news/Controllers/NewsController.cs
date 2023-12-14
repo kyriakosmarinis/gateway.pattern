@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NewsAPI.Models;
 using service.news.Data;
-using service.news.Models;
 
 namespace service.news.Controllers
 {
     [ApiController]
     [Route("news")]
-    public class NewsController : Controller
+    public class NewsController : ControllerBase
     {
         private readonly INewsRepository _newsRepository;
 
@@ -20,7 +15,7 @@ namespace service.news.Controllers
         }
 
         [HttpGet("api")]
-        public async Task<string> GetNewsAsync() {
+        public async Task<IEnumerable<Article>> GetNewsAsync() {
             return await _newsRepository.GetNewsAsync();
         }
     }

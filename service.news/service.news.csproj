@@ -18,11 +18,9 @@
     <None Remove="service.news.http" />
     <None Remove="Controllers\" />
     <None Remove="Data\" />
-    <None Remove="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 </Project>
