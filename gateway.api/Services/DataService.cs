@@ -13,7 +13,7 @@ namespace gateway.api.Services
         private readonly HttpClient _httpClient;
 
         public DataService(IHttpClientFactory httpClientFactory) {
-            _httpClient = httpClientFactory.CreateClient();
+            _httpClient = httpClientFactory.CreateClient() ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
         public async Task<IActionResult> GetDataAsync(double lat, double lon, string q, string bandId) {
@@ -26,18 +26,17 @@ namespace gateway.api.Services
             var newsContent = await newsTask;
             var musicContent = await musicTask;
 
-            var combinedResult = new
-            {
-                Weather = JsonConvert.DeserializeObject<Weather>(weatherContent.Content),
-                Music = JsonConvert.DeserializeObject<Band>(musicContent.Content),
-                News = JsonConvert.DeserializeObject<List<Article>>(newsContent.Content)                
+            var combinedResult = new {
+                Weather = weatherContent.Content != null ? JsonConvert.DeserializeObject<Weather>(weatherContent.Content) : new Weather(),
+                Music = musicContent.Content != null ? JsonConvert.DeserializeObject<Band>(musicContent.Content) : new Band(),
+                News = newsContent.Content != null ? JsonConvert.DeserializeObject<List<Article>>(newsContent.Content) : new List<Article>()
             };
 
             return new JsonResult(combinedResult);
         }
 
         #region Weather
-        private async Task<ContentResult> GetWeatherDataAsync(double lat, double lon) {
+        public async Task<ContentResult> GetWeatherDataAsync(double lat, double lon) {
             string url = $"https://localhost:7186/weather/api?lat={lat}&lon={lon}";
 
             try {
@@ -63,7 +62,7 @@ namespace gateway.api.Services
         #endregion
 
         #region News
-        private async Task<ContentResult> GetNewsDataAsync(string q)
+        public async Task<ContentResult> GetNewsDataAsync(string q)
         {
             string url = $"https://localhost:7110/news/api?q={q}";
 
@@ -87,7 +86,7 @@ namespace gateway.api.Services
         #endregion
 
         #region Music
-        private async Task<ContentResult> GetMusicDataAsync(string bandId)
+        public async Task<ContentResult> GetMusicDataAsync(string bandId)
         {
             string url = $"https://localhost:7015/music/api?bandId={bandId}";
 

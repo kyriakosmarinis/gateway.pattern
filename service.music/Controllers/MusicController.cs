@@ -16,7 +16,7 @@ namespace service.music.Controllers
 
         [HttpGet("api")]
         public async Task<Band> GetBandAsync(string bandId) {
-            return await _musicRepository.GetBandAsync(bandId);
+            return await _musicRepository.GetBandInfoAsync(bandId);
         }
     }
 }

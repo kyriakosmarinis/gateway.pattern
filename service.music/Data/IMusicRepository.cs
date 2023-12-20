@@ -4,7 +4,8 @@ namespace service.music.Data
 {
 	public interface IMusicRepository
 	{
-        Task<Band> GetBandAsync(string bandId);
+        Task<string> GetTokenAsync();
+        Task<Band> GetBandInfoAsync(string bandId);
     }
 }
 
